@@ -69,19 +69,20 @@ app.post('/api/createDoctor', function(req, res) {
       }
       if(countIndex == (snapshot.numChildren())&& erEmail!=1)
       {
-        doctorRef.push(data, function(err) {
-          if (err) {
-            try {
-              res.send(err)
-            } catch (e) {}
-          } else {
-            // var key = Object.keys(snapshot.val())[0];
-            // console.log(key);
-            try {
-              res.json({message: "Success: User Save.", result: true});
-            } catch (e) {}
-          }
-        });
+        doctorRef.child(data.Profile.Email).setValue(data)
+        // doctorRef.push(data, function(err) {
+        //   if (err) {
+        //     try {
+        //       res.send(err)
+        //     } catch (e) {}
+        //   } else {
+        //     // var key = Object.keys(snapshot.val())[0];
+        //     // console.log(key);
+        //     try {
+        //       res.json({message: "Success: User Save.", result: true});
+        //     } catch (e) {}
+        //   }
+        // });
       }
     }
   })
