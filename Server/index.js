@@ -34,6 +34,7 @@ app.get('/', function (req, res) {
 
 class Account {
   constructor(key,name,birth,email,pass,phone) {
+    this.key = key
     this.name = name;
     this.birth  = birth
     this.email  = email
@@ -69,7 +70,20 @@ app.post('/api/createDoctor', function(req, res) {
       }
       if(countIndex == (snapshot.numChildren())&& erEmail!=1)
       {
-        doctorRef.child(data.Profile.Email).setValue(data)
+        var dataKey = email.substring(0,email.indexOf("@"))
+        doctorRef.child(dataKey).set(data, function(err){
+            if (err) {
+              try {
+                res.send(err)
+              } catch (e) {}
+            } else {
+              // var key = Object.keys(snapshot.val())[0];
+              // console.log(key);
+              try {
+                res.json({message: "Success: User Save.", result: true});
+              } catch (e) {}
+            }
+        })
         // doctorRef.push(data, function(err) {
         //   if (err) {
         //     try {
@@ -114,25 +128,40 @@ app.post('/api/createPatient', function(req, res) {
       } catch (e) {}
       if(countIndex == (snapshot.numChildren())&& erEmail!=1)
       {
-        patientRef.push(data, function(err) {
-          if (err) {
-            try {
-              res.send(err)
-            } catch (e) {}
-          } else {
-            // var key = Object.keys(snapshot.val())[0];
-            // console.log(key);
-            try {
-              res.json({message: "Success: User Save.", result: true});
-            } catch (e) {}
-          }
-        });
+        var dataKey = email.substring(0,email.indexOf("@"))
+        patientRef.child(dataKey).set(data, function(err){
+            if (err) {
+              try {
+                res.send(err)
+              } catch (e) {}
+            } else {
+              // var key = Object.keys(snapshot.val())[0];
+              // console.log(key);
+              try {
+                res.json({message: "Success: User Save.", result: true});
+              } catch (e) {}
+            }
+        })
+
+        // patientRef.push(data, function(err) {
+        //   if (err) {
+        //     try {
+        //       res.send(err)
+        //     } catch (e) {}
+        //   } else {
+        //     // var key = Object.keys(snapshot.val())[0];
+        //     // console.log(key);
+        //     try {
+        //       res.json({message: "Success: User Save.", result: true});
+        //     } catch (e) {}
+        //   }
+        // });
       }
     }
   })
 });
 
-// update Patient --->ok
+// update Patient
 app.put('/api/updatePatient', function(req, res) {
   var data = req.body;
   var flag = 0;
@@ -146,12 +175,15 @@ app.put('/api/updatePatient', function(req, res) {
         item.key = childSnapshot.key;// key
         count += 1
         try {
-          if (item.Profile.Email != undefined && item.Profile.Email == data.Profile.Email )
+          if(item.key ==  data.Profile.key)
+          // if (item.Profile.Email != undefined && item.Profile.Email == data.Profile.Email )
           {
             flag = 1;
             var newData = item;
             if(data.Profile.Name != undefined)
               newData.Profile.Name = data.Profile.Name;
+            if(data.Profile.Email != undefined)
+              newData.Profile.Email = data.Profile.Email;
             if(data.Profile.Birth != undefined)
               newData.Profile.Birth = data.Profile.Birth;
             if(data.Profile.Pass != undefined)
@@ -190,7 +222,7 @@ app.put('/api/updatePatient', function(req, res) {
 });
 
 
-// update Doctor --->ok
+// update Doctor
 app.put('/api/updateDoctor', function(req, res) {
   var data = req.body;
   var flag = 0;
@@ -204,12 +236,15 @@ app.put('/api/updateDoctor', function(req, res) {
         item.key = childSnapshot.key;// key
         count += 1
         try {
-          if (item.Profile.Email != undefined && item.Profile.Email == data.Profile.Email )
+          if(data.Profile.key === item.key)
+          // if (item.Profile.Email != undefined && item.Profile.Email == data.Profile.Email )
           {
             flag = 1;
             var newData = item;
             if(data.Profile.Name != undefined)
               newData.Profile.Name = data.Profile.Name;
+            if(data.Profile.Email != undefined)
+                newData.Profile.Email = data.Profile.Email;
             if(data.Profile.Birth != undefined)
               newData.Profile.Birth = data.Profile.Birth;
             if(data.Profile.Pass != undefined)
@@ -223,6 +258,7 @@ app.put('/api/updateDoctor', function(req, res) {
                 } catch (e) {
 
                 }
+
               } else {
                 doctorRef.child(item.key).once("value", function(snapshot) {
                   if (snapshot.val() == null) {
@@ -264,7 +300,8 @@ app.delete('/api/removePatient', function(req, res) {
         item.key = childSnapshot.key;// key
         count += 1
         try {
-          if (item.Profile.Email != undefined && item.Profile.Email == email )
+          // if (item.Profile.Email != undefined && item.Profile.Email == email )
+          if (item.key == data.Profile.key )
           {
             flag = 1;
             patientRef.child(item.key).remove(function(err) {
@@ -301,7 +338,8 @@ app.delete('/api/removePatient', function(req, res) {
           item.key = childSnapshot.key;// key
           count += 1
           try {
-            if (item.Profile.Email != undefined && item.Profile.Email == email )
+            // if (item.Profile.Email != undefined && item.Profile.Email == email )
+            if (item.key == data.Profile.key )
             {
               flag = 1;
               doctorRef.child(item.key).remove(function(err) {
@@ -312,7 +350,8 @@ app.delete('/api/removePatient', function(req, res) {
                     res.json({message: "Success: User deleted.", result: true});
                   } catch (e) {}
                 }
-              })}}
+              })
+            }}
               catch(err) {}
               if(flag == 0 && count == snapshot.numChildren())
               {  try {
@@ -437,7 +476,7 @@ app.delete('/api/removePatient', function(req, res) {
     });
   });
 
-//  login Doctor --->ok
+//  login Doctor
 app.post('/api/login', function(req, res) {
   var data = req.body;
   var flag = 0;

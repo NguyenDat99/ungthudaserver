@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+    <!-- new code -->
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/Sans.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/bootstrap.min.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/Material.css">
+    <link rel="stylesheet" href="%PUBLIC_URL%/css/font-awesome.min.css">
+
+    <script src="%PUBLIC_URL%/js/jquery-3.5.1.min.js"></script>
+    <script src="%PUBLIC_URL%/js/popper.min.js"></script>
+    <script src="%PUBLIC_URL%/js/bootstrap.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+    	$('[data-toggle="tooltip"]').tooltip();
+    	var actions = $("table td:last-child").html();
+    	$(document).on("click", ".delete", function(){
+            $(this).parents("tr").remove();
+    		$(".add-new").removeAttr("disabled");
+        });
+    });
+    </script>
+  <!-- new code -->
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+  </body>
+</html>
