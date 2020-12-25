@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import './css/Edit.css';
 import { withRouter } from 'react-router-dom';
-
+import Cookies from 'universal-cookie';
 
 var request = {
   createPatient:{
@@ -36,6 +36,24 @@ export default class AddAcccount extends Component {
     this.daThemDuLieu = this.daThemDuLieu.bind(this);
     this.quayVe = this.quayVe.bind(this);
   };
+  componentDidMount() {
+    this.tuChoiQuyen();
+  }
+  tuChoiQuyen()
+  {
+    try {
+      const cookies = new Cookies();
+      cookies.get('isLogin')
+      if(cookies.cookies.isLogin !== "true")
+      {
+        let path = `/`;
+        this.props.history.push(path);
+      }
+    } catch (e) {
+      let path = `/`;
+      this.props.history.push(path);
+    }
+  }
   quayVe()
   {
     let path = `/home`;
