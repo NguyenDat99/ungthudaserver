@@ -7,43 +7,43 @@ import Cookies from 'universal-cookie';
 var request = {
   updatePatient:{
     method: 'put',
-    url: "http://0.0.0.0:4000/api/updatePatient"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/updatePatient"
   },
   updateDoctor:{
     method: 'put',
-    url: "http://0.0.0.0:4000/api/updateDoctor"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/updateDoctor"
   },
   updateAdmin:{
     method: 'put',
-    url: "http://0.0.0.0:4000/api/updateAdmin"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/updateAdmin"
   },
   deletePatients:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removePatient",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removePatient",
     data:{}
   },
   deleteDoctor:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removeDoctor",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removeDoctor",
     data:{}
   }
   ,
   deleteAdmin:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removeAdmin",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removeAdmin",
     data:{}
   },
   createPatient:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createPatient"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createPatient"
   },
   createDoctor:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createDoctor"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createDoctor"
   },
   createAdmin:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createAdmin"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createAdmin"
   }
 }
 

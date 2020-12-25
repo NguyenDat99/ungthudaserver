@@ -7,15 +7,15 @@ import Cookies from 'universal-cookie';
 var request = {
   createPatient:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createPatient"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createPatient"
   },
   createDoctor:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createDoctor"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createDoctor"
   },
   createAdmin:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/createAdmin"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/createAdmin"
   }
 }
 

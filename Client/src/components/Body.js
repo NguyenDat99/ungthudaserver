@@ -18,30 +18,30 @@ var titleName =
 var request = {
   getPatients:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/getPatients"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/getPatients"
   },
   getDoctors:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/getDoctors"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/getDoctors"
   },
   getAdmins:{
     method: 'post',
-    url: "http://0.0.0.0:4000/api/getAdmins"
+    url: "https://webadminbackend-pchohu4vcq-as.a.run.app/api/getAdmins"
   },
   deletePatients:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removePatient",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removePatient",
     data:{}
   },
   deleteDoctor:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removeDoctor",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removeDoctor",
     data:{}
   }
   ,
   deleteAdmin:{
     method: 'delete',
-    url:"http://0.0.0.0:4000/api/removeAdmin",
+    url:"https://webadminbackend-pchohu4vcq-as.a.run.app/api/removeAdmin",
     data:{}
   }
 }
