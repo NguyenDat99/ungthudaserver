@@ -14,7 +14,6 @@ function App() {
     <Router>
   <div>
     <Route path="/" exact component={Login}/>
-    <Route path="/home"exact  component={Header}/>
     <Route path="/home" exact component={Body}/>
     <Route path="/home/EditAcc" exact component={EditAcc}/>
     <Route path="/home/AddAcccount"exact component={AddAcccount}/>
@@ -23,5 +22,6 @@ function App() {
   </Router>
   );
 }
+  // <Route path="/home"exact  component={Header}/>
 
 export default App;

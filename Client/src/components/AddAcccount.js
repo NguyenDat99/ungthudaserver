@@ -12,6 +12,10 @@ var request = {
   createDoctor:{
     method: 'post',
     url: "http://0.0.0.0:4000/api/createDoctor"
+  },
+  createAdmin:{
+    method: 'post',
+    url: "http://0.0.0.0:4000/api/createAdmin"
   }
 }
 
@@ -74,6 +78,11 @@ export default class AddAcccount extends Component {
             requestUrl.data = data;
             newPromise = axios(requestUrl)
           }
+          else if (role === "Quản trị viên") {
+            requestUrl = request.createAdmin;
+            requestUrl.data = data;
+            newPromise = axios(requestUrl)
+          }
           axios(newPromise).then(res => {
             console.log(res);
           }).catch(error => console.log(error));
@@ -115,6 +124,7 @@ export default class AddAcccount extends Component {
                 <select class="form-control" id="sel1" name ="role" onChange={this.daThemDuLieu}>
                   <option>Bệnh nhân</option>
                   <option>Bác sĩ</option>
+                  <option>Quản trị viên</option>
                 </select>
               </div>
               <div className="form-group">
