@@ -66,6 +66,8 @@ export default class EditAcc extends Component {
     this.guiDuLieu = this.guiDuLieu.bind(this);
     this.daSuaDuLieu = this.daSuaDuLieu.bind(this);
     this.quayVe = this.quayVe.bind(this);
+    this.kiemTraSoDienThoai = this.kiemTraSoDienThoai.bind(this);
+    this.stringToDate = this.stringToDate.bind(this);
   };
   //event
   componentDidMount() {
@@ -87,8 +89,40 @@ export default class EditAcc extends Component {
       this.props.history.push(path);
     }
   }
+  stringToDate(_date,_format)
+  {
+    var indexKey = _date.indexOf("/");
+    if(indexKey!= -1)
+    {
+      var  _delimiter ="/";
+      var formatLowerCase=_format.toLowerCase();
+      var formatItems=formatLowerCase.split(_delimiter);
+      var dateItems=_date.split(_delimiter);
+      var monthIndex=formatItems.indexOf("mm");
+      var dayIndex=formatItems.indexOf("dd");
+      var yearIndex=formatItems.indexOf("yyyy");
 
-
+      var year = dateItems[yearIndex]
+      if( year.length < 4)
+      {
+        year = "0"+ year;
+      }
+      var date = dateItems[dayIndex]
+      if( date.length < 2)
+      {
+        date = "0"+ date;
+      }
+      var month = dateItems[monthIndex]
+      if( month.length < 2)
+      {
+        month = "0"+ month;
+      }
+      return (year+"-"+month+"-"+date);
+    }
+    else {
+      return _date
+    }
+  }
   luuDuLieuChuyenQua(){
     try {
       var account = this.props.history.location.state.account
@@ -98,8 +132,11 @@ export default class EditAcc extends Component {
       this.setState({ key: account.key });
       if(account.name !== undefined)
       this.setState({ name: account.name });
+      //fix date
+      account.birth = this.stringToDate(account.birth,"dd/MM/yyyy")
       if(account.birth !== undefined)
       this.setState({ birth: account.birth });
+
       if(account.email !== undefined)
       this.setState({ email: account.email });
       if(account.pass !== undefined)
@@ -131,159 +168,171 @@ export default class EditAcc extends Component {
     var value = target.value;
     this.setState({[name]: value});
   }
+  kiemTraSoDienThoai(str){
+    if(str.match(/^\d{10}$/g) === null)
+    return false
+    return true
+  }
   guiDuLieu()
   {
-    var newPromise = ""
-    var data = {
-      "Profile": {
-        "key":this.state.key,
-        "Email":this.state.email,
-        "Name":this.state.name,
-        "Birth":this.state.birth,
-        "Pass":this.state.pass,
-        "Phone":this.state.phone
+    if (this.state.phone.match(/^\d{10}$/g) !== null ) {
+      var newPromise = ""
+      var data = {
+        "Profile": {
+          "key":this.state.key,
+          "Email":this.state.email,
+          "Name":this.state.name,
+          "Birth":this.state.birth,
+          "Pass":this.state.pass,
+          "Phone":this.state.phone
+        }
       }
-    }
-    var requestUrl = ""
-    if(this.state.role == "Bác sĩ" && this.state.role == this.state.oldRole)
-    {
-      requestUrl = request.updateDoctor;
-      requestUrl.data = data;
-      newPromise = axios(requestUrl)
-      // console.log(requestUrl);
-      axios(newPromise).then(res => {
-        console.log(res);
-      }).catch(error => console.log(error));
-    }
-    else if (this.state.role == "Bệnh nhân" && this.state.role == this.state.oldRole)
-    {
-      requestUrl = request.updatePatient;
-      requestUrl.data = data;
-      newPromise = axios(requestUrl)
-      // console.log(requestUrl);
-      axios(newPromise).then(res => {
-        console.log(res);
-      }).catch(error => console.log(error));
-    }
-    else if (this.state.role == "Quản trị viên" && this.state.role == this.state.oldRole)
-    {
-      requestUrl = request.updateAdmin;
-      requestUrl.data = data;
-      newPromise = axios(requestUrl)
-      // console.log(requestUrl);
-      axios(newPromise).then(res => {
-        console.log(res);
-      }).catch(error => console.log(error));
-    }
-    else if(this.state.oldRole == "Bác sĩ" && this.state.role != this.state.oldRole)
-    {
-      if(this.state.role == "Bệnh nhân")
+      var requestUrl = ""
+      if(this.state.role == "Bác sĩ" && this.state.role == this.state.oldRole)
       {
-        //tao benh nhan
-        requestUrl = request.createPatient;
+        requestUrl = request.updateDoctor;
         requestUrl.data = data;
         newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa bac si
-        requestUrl = request.deleteDoctor;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
+        // console.log(requestUrl);
         axios(newPromise).then(res => {
           console.log(res);
         }).catch(error => console.log(error));
       }
-      else if(this.state.role == "Quản trị viên") {
-        //tao quan tri vien
-        requestUrl = request.createAdmin;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa bac si
-        requestUrl = request.deleteDoctor;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-      }
-    }
-    else if (this.state.oldRole == "Bệnh nhân" && this.state.role != this.state.oldRole) {
-      if(this.state.role == "Bác sĩ")
+      else if (this.state.role == "Bệnh nhân" && this.state.role == this.state.oldRole)
       {
-        //tao bac si
-        requestUrl = request.createDoctor;
+        requestUrl = request.updatePatient;
         requestUrl.data = data;
         newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa benh nhan
-        requestUrl = request.deletePatients;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
+        // console.log(requestUrl);
         axios(newPromise).then(res => {
           console.log(res);
         }).catch(error => console.log(error));
       }
-      else if(this.state.role == "Quản trị viên") {
-        // tao quan tri vien
-        requestUrl = request.createAdmin;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa benh nhan
-        requestUrl = request.deletePatients;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-      }
-    }
-    else if (this.state.oldRole == "Quản trị viên" && this.state.role != this.state.oldRole) {
-      if(this.state.role == "Bệnh nhân")
+      else if (this.state.role == "Quản trị viên" && this.state.role == this.state.oldRole)
       {
-        // tao benh nhan
-        requestUrl = request.createPatient;
+        requestUrl = request.updateAdmin;
         requestUrl.data = data;
         newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa quan tri vien
-        requestUrl = request.deleteAdmin;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
+        // console.log(requestUrl);
         axios(newPromise).then(res => {
           console.log(res);
         }).catch(error => console.log(error));
       }
-      else if(this.state.role == "Bác sĩ") {
-        //tao bac si
-        requestUrl = request.createDoctor;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
-        //xoa quan tri vien
-        requestUrl = request.deleteAdmin;
-        requestUrl.data = data;
-        newPromise = axios(requestUrl)
-        axios(newPromise).then(res => {
-          console.log(res);
-        }).catch(error => console.log(error));
+      else if(this.state.oldRole == "Bác sĩ" && this.state.role != this.state.oldRole)
+      {
+        if(this.state.role == "Bệnh nhân")
+        {
+          //tao benh nhan
+          requestUrl = request.createPatient;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa bac si
+          requestUrl = request.deleteDoctor;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
+        else if(this.state.role == "Quản trị viên") {
+          //tao quan tri vien
+          requestUrl = request.createAdmin;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa bac si
+          requestUrl = request.deleteDoctor;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
       }
+      else if (this.state.oldRole == "Bệnh nhân" && this.state.role != this.state.oldRole) {
+        if(this.state.role == "Bác sĩ")
+        {
+          //tao bac si
+          requestUrl = request.createDoctor;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa benh nhan
+          requestUrl = request.deletePatients;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
+        else if(this.state.role == "Quản trị viên") {
+          // tao quan tri vien
+          requestUrl = request.createAdmin;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa benh nhan
+          requestUrl = request.deletePatients;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
+      }
+      else if (this.state.oldRole == "Quản trị viên" && this.state.role != this.state.oldRole) {
+        if(this.state.role == "Bệnh nhân")
+        {
+          // tao benh nhan
+          requestUrl = request.createPatient;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa quan tri vien
+          requestUrl = request.deleteAdmin;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
+        else if(this.state.role == "Bác sĩ") {
+          //tao bac si
+          requestUrl = request.createDoctor;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+          //xoa quan tri vien
+          requestUrl = request.deleteAdmin;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+          axios(newPromise).then(res => {
+            console.log(res);
+          }).catch(error => console.log(error));
+        }
+      }
+
+      let path = `/home`;
+      this.props.history.push(path,{currentPage:this.state.currentPage});
     }
-    //
-    let path = `/home`;
-    this.props.history.push(path,{currentPage:this.state.currentPage});
+    else {
+      alert("Số điện thoại không đúng")
+      let path = `/home`;
+      this.props.history.push(path,{currentPage:this.state.currentPage});
+    }
   }
   render() {
     return (
@@ -299,10 +348,10 @@ export default class EditAcc extends Component {
                 <input type="text" name="name" className="form-control" placeholder="Họ và tên " defaultValue ={this.state.name} onChange={this.daSuaDuLieu} />
               </div>
               <div className="form-group">
-                <input type="text"  name="birth" className="form-control" placeholder="Ngày sinh" defaultValue ={this.state.birth} onChange={this.daSuaDuLieu}/>
+                <input type="text"  name="birth" type="date" className="form-control" placeholder="Ngày sinh" value ={this.state.birth} onChange={this.daSuaDuLieu}/>
               </div>
               <div className="form-group">
-                <input type="text"  name="email" className="form-control" placeholder="Email" defaultValue ={this.state.email} onChange={this.daSuaDuLieu}/>
+                <input type="text"  name="email"   type="email" className="form-control" placeholder="Email" defaultValue ={this.state.email} onChange={this.daSuaDuLieu}/>
               </div>
               <div className="form-group">
                 <input type="text" name="pass" className="form-control" placeholder="Mật khẩu" defaultValue ={this.state.pass} onChange={this.daSuaDuLieu}/>

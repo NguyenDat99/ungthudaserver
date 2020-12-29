@@ -66,11 +66,13 @@ export default class AddAcccount extends Component {
     var value = target.value;
     this.setState({[name]: value});
   }
+
   guiDuLieu(event)
   {
     if(this.state.name !== "" && this.state.birth !== "" && this.state.email !== ""
-      && this.state.pass !== ""&& this.state.phone !== "")
-      {
+    && this.state.pass !== ""&& this.state.phone !== "")
+    {
+      if (this.state.phone.match(/^\d{10}$/g) !== null) {
         var newPromise = ""
         var data = {
           "Profile": {
@@ -81,33 +83,37 @@ export default class AddAcccount extends Component {
             "Phone":this.state.phone,
           }
         }
-          var requestUrl = ""
-          var role = this.state.role;
-          if(role === "")
-            role = "Bệnh nhân"
-          if(role === "Bệnh nhân")
-          {
-            requestUrl = request.createPatient;
-            requestUrl.data = data;
-            newPromise = axios(requestUrl)
-          }
-          else if (role === "Bác sĩ") {
-            requestUrl = request.createDoctor;
-            requestUrl.data = data;
-            newPromise = axios(requestUrl)
-          }
-          else if (role === "Quản trị viên") {
-            requestUrl = request.createAdmin;
-            requestUrl.data = data;
-            newPromise = axios(requestUrl)
-          }
-          axios(newPromise).then(res => {
-            console.log(res);
-          }).catch(error => console.log(error));
-          //
+        var requestUrl = ""
+        var role = this.state.role;
+        if(role === "")
+        role = "Bệnh nhân"
+        if(role === "Bệnh nhân")
+        {
+          requestUrl = request.createPatient;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+        }
+        else if (role === "Bác sĩ") {
+          requestUrl = request.createDoctor;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+        }
+        else if (role === "Quản trị viên") {
+          requestUrl = request.createAdmin;
+          requestUrl.data = data;
+          newPromise = axios(requestUrl)
+        }
+        axios(newPromise).then(res => {
+          console.log(res);
+        }).catch(error => console.log(error));
+        //
         let path = `/home`;
         this.props.history.push(path);
       }
+      else {
+        alert("Số điện thoại không đúng")
+      }
+    }
     else {
       alert("thiếu thông tin")
     }
@@ -127,10 +133,10 @@ export default class AddAcccount extends Component {
                 <input type="text" name="name" className="form-control" placeholder="Họ và tên "  onChange={this.daThemDuLieu}/>
               </div>
               <div className="form-group">
-                <input type="text" name="birth" className="form-control" placeholder="Ngày sinh" onChange={this.daThemDuLieu} />
+                <input type="text" type="date"  name="birth" className="form-control" placeholder="Ngày sinh" onChange={this.daThemDuLieu} />
               </div>
               <div className="form-group">
-                <input type="text" name="email" className="form-control" placeholder="Email" onChange={this.daThemDuLieu} />
+                <input type="text" type="email" name="email" className="form-control" placeholder="Email" onChange={this.daThemDuLieu} />
               </div>
               <div className="form-group">
                 <input type="text" name="pass" className="form-control" placeholder="Mật khẩu"  onChange={this.daThemDuLieu}/>

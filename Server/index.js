@@ -55,7 +55,7 @@ app.post('/api/getPatients', function(req, res) {
         let item = childSnapshot.val(); // value
         item.key = childSnapshot.key;// key
         var key,name,birth,email,pass,phone = ""
-        if (item.key != undefined)
+        if (item.key !== undefined)
         key = item.key// key
         try {
           if (item.Profile.Name !== undefined)
@@ -65,7 +65,7 @@ app.post('/api/getPatients', function(req, res) {
           name = ""
         }
         try {
-          if (item.Profile.Birth != undefined)
+          if (item.Profile.Birth !== undefined)
           birth  = item.Profile.Birth;
         }
         catch(err) {

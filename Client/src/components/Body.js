@@ -73,7 +73,7 @@ export default class Body extends Component {
     try {
       this.getAccounts();
     } catch (e) {}
-    //
+
   }
   //  xu ly  event
   componentDidMount() {
@@ -155,15 +155,17 @@ export default class Body extends Component {
         var acc = new account(item.key,i+1,item.name,item.birth,item.email,item.pass,item.phone,"Quản trị viên")
         data.push(acc)
       })
+      var dataCount = data.length + 1
       responses[1].data.data.map(function(item, i){
-        var acc = new account(item.key,i+data.length+1,item.name,item.birth,item.email,item.pass,item.phone,"Bác sĩ")
+        var acc = new account(item.key,i+dataCount,item.name,item.birth,item.email,item.pass,item.phone,"Bác sĩ")
         data.push(acc)
       })
+      dataCount = data.length + 1
       responses[2].data.data.map(function(item, i){
-        var acc = new account(item.key,i+data.length+1,item.name,item.birth,item.email,item.pass,item.phone,"Bệnh nhân")
+        var acc = new account(item.key,i+dataCount,item.name,item.birth,item.email,item.pass,item.phone,"Bệnh nhân")
         data.push(acc)
       })
-      console.log(responses);
+      console.log(this.state.accounts);
       // use/access the results
       this.setState({ accounts: data });
     })).catch(errors => {
@@ -294,7 +296,7 @@ export default class Body extends Component {
                 <tbody>
                   {
                     currentAccount.map((item,i) =>
-                    <tr key={item.id}>
+                    <tr key={item.key}>
                       <td>{item.id}</td>
                       <td>{item.name}</td>
                       <td>{item.birth}</td>
@@ -334,4 +336,4 @@ export default class Body extends Component {
 
 
 
-                // <li id="button-link"><a href="#" onClick={this.dangXuat}>Đăng xuất</a></li>
+// <li id="button-link"><a href="#" onClick={this.dangXuat}>Đăng xuất</a></li>
